@@ -1,0 +1,410 @@
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        body, html {
+            overflow-y: none;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: grey;
+            margin-bottom: 0px;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 1px solid #000;
+            background-color: transparent;
+            border-radius: 0;
+            padding-left: 0;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .container {
+            position: absolute;
+            padding: 30px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            max-width: 1000px;
+            margin-left: 238px;
+            overflow-y: auto;
+            height: calc(100vh - 100px);
+            font-family: 'Arial MT Rounded';
+            z-index: 1;
+            overflow-x: hidden;
+            margin-top: -20px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .plus-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #7b7b7b;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .plus-icon.uploaded {
+            margin-top: 10px;
+        }
+
+        .plus-icon:hover {
+            color: #000000;
+            transform: scale(1.2);
+        }
+
+        .card-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .card-header {
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            list-style-type: none;
+            padding-left: 0;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .file-item {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-actions .btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            background-color: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 1180px;
+            margin-top: -37px;
+        }
+
+        .btn-custom img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .breadcrumb {
+            margin-top: 20px;
+            margin-left: 260px;
+        }
+
+        @media (max-width: 991px) {
+            .container {
+                margin-left: 0px;
+                width: 100%;
+                padding: 10px;
+                max-width: 100%;
+                margin-top: 20px;
+            }
+
+            .breadcrumb {
+                display: none;
+            }
+
+            .btn-custom {
+                margin-left: 0px;
+            }
+
+            .file-item {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Bench Marking and Valuation</span>
+        <button class="btn btn-custom" id="add-benchmark-btn"><img src="{% static 'images/add.png' %}" alt="Add"></button>    
+    </div>  
+    <div id="sections-container" class="container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let formCount = 1;
+            let allFiles = [];
+            let isFormVisible = false;
+        
+            // Check if there is any data. If none, show the empty form by default
+            const sectionsContainer = document.getElementById('sections-container');
+            if (sectionsContainer.children.length === 0) {
+                addNewForm(formCount); // Show the form by default if no sections are present
+            }
+    
+            // Toggle the new form when "+" button is clicked
+            const addBenchmarkBtn = document.getElementById('add-benchmark-btn');
+            addBenchmarkBtn.addEventListener('click', function () {
+                if (!isFormVisible) {
+                    formCount++;
+                    addNewForm(formCount, true); // Toggle form when button is pressed, starting from second form onwards
+                    isFormVisible = true;
+                } else {
+                    hideNewForm(); // Hide form if already visible
+                    isFormVisible = false;
+                }
+            });
+    
+            // Function to add a new form, only from the second section will the product dropdown be included
+            function addNewForm(formCount, withProductDropdown = false) {
+                let productDropdownHTML = '';
+                if (withProductDropdown) {
+                    productDropdownHTML = `
+                        <div class="col-md-12">
+                            <div class="row">
+                            <label for="p_name_${formCount}" class="form-label">Product</label>
+                            <select id="p_name_${formCount}" name="p_name" class="form-control">
+                                <option value="">--select--</option>
+                                {% for product in products %}
+                                    <option value="{{ product.name }}">{{ product.name }}</option>
+                                {% endfor %}
+                            </select>
+                            </div>
+                        </div>
+                    `;
+                }
+                const newFormHTML = `
+                    <form id="bench_form_${formCount}" class="content-area new-form-section" enctype="multipart/form-data">
+                        <div class="row">
+                            ${productDropdownHTML}
+                            <div class="col-md-4">
+                                <label for="valuation_${formCount}" class="form-label">Current Valuation</label>
+                                <input type="number" id="valuation_${formCount}" name="valuation" class="form-control" required placeholder="Enter valuation" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="source_${formCount}" class="form-label">Valuation Source / Vendor</label>
+                                <input type="text" id="source_${formCount}" name="source" class="form-control" required placeholder="Enter valuation source" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="valuation_dt_${formCount}" class="form-label">Valuation Date</label>
+                                <input type="date" id="valuation_dt_${formCount}" name="valuation_dt" class="form-control" required placeholder="Enter valuation date" required>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card card-wrapper">
+                                <div class="card-header">
+                                    <p>Valuation Documents<br> <small>&lt;&lt; Upload PDF format &gt;&gt;</small></p>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="file-list" id="valuation_file_list_${formCount}"></ul>
+                                    <div class="plus-icon" id="valuation-plus-icon_${formCount}">
+                                        <i class="fas fa-plus"></i>
+                                        <input type="file" accept=".pdf" name="valuation_doc" id="valuation_doc_${formCount}" class="file-input pdf-upload" multiple style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="buttons-container">
+                            <button type="button" class="btn btn-primary submit-btn" data-form-id="${formCount}">Submit</button>
+                        </div>
+                    </form>
+                `;
+        
+                sectionsContainer.insertAdjacentHTML('afterbegin', newFormHTML);
+                attachFileUploadListeners(formCount);
+                attachSubmitListener(formCount);
+            }
+    
+            // Hide the form
+            function hideNewForm() {
+                const newFormSection = document.querySelector('.new-form-section');
+                if (newFormSection) {
+                    newFormSection.remove();
+                }
+            }
+    
+            // Attach file upload listeners for each new form
+            function attachFileUploadListeners(formId) {
+                const valuationPlusIcon = document.getElementById(`valuation-plus-icon_${formId}`);
+                const valuationInput = document.getElementById(`valuation_doc_${formId}`);
+                const valuationFileList = document.getElementById(`valuation_file_list_${formId}`);
+    
+                let currentFiles = [];
+                valuationPlusIcon.addEventListener('click', function () {
+                    valuationInput.click();
+                });
+    
+                valuationInput.addEventListener('change', function () {
+                    const newFiles = Array.from(valuationInput.files);
+                    currentFiles = currentFiles.concat(newFiles);
+                    allFiles = allFiles.concat(newFiles);
+                    displayFiles(currentFiles, valuationFileList);
+                });
+            }
+    
+            // Function to display uploaded files in a list
+            function displayFiles(files, fileListElement) {
+                fileListElement.innerHTML = '';
+                files.forEach((file, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('file-item');
+    
+                    const fileName = document.createElement('span');
+                    fileName.classList.add('file-name');
+                    fileName.textContent = file.name;
+    
+                    const fileActions = document.createElement('div');
+                    fileActions.classList.add('file-actions');
+    
+                    const openButton = document.createElement('button');
+                    openButton.classList.add('btn', 'btn-primary');
+                    openButton.textContent = 'Open';
+                    openButton.addEventListener('click', function () {
+                        const fileURL = URL.createObjectURL(file);
+                        window.open(fileURL, '_blank');
+                    });
+    
+                    const removeButton = document.createElement('button');
+                    removeButton.classList.add('btn', 'btn-danger');
+                    removeButton.textContent = 'Remove';
+                    removeButton.addEventListener('click', function () {
+                        files.splice(index, 1);
+                        displayFiles(files, fileListElement);
+                    });
+    
+                    fileActions.appendChild(openButton);
+                    fileActions.appendChild(removeButton);
+                    listItem.appendChild(fileName);
+                    listItem.appendChild(fileActions);
+                    fileListElement.appendChild(listItem);
+                });
+            }
+    
+            // Attach submit listener for each form
+            function attachSubmitListener(formId) {
+                const submitBtn = document.querySelector(`.submit-btn[data-form-id="${formId}"]`);
+                submitBtn.addEventListener('click', function () {
+                    submitFormData(formId);
+                });
+            }
+    
+            // Handle form submission
+            function submitFormData(formId) {
+                const form = document.getElementById(`bench_form_${formId}`);
+                lockForm(formId);
+                displaySubmittedData(formId);
+            }
+    
+            // Lock the form and add Edit and Remove buttons
+            function lockForm(formId) {
+                const form = document.getElementById(`bench_form_${formId}`);
+                const inputs = form.querySelectorAll('input, button');
+                inputs.forEach(input => input.disabled = true);
+      
+                const removeButtonHTML = `<button type="button" class="btn btn-danger remove-btn" data-form-id="${formId}">Remove Section</button>`;
+                form.insertAdjacentHTML('beforeend', removeButtonHTML);
+                document.querySelector(`.remove-btn[data-form-id="${formId}"]`).addEventListener('click', function () {
+                    removeSection(formId);
+                });
+            }
+    
+            // Remove the section
+            function removeSection(formId) {
+                const form = document.getElementById(`bench_form_${formId}`);
+                form.remove();
+                if (sectionsContainer.children.length === 0) {
+                    addNewForm(1); // Show the empty form again if all sections are removed
+                }
+            }
+    
+            // Display submitted data
+            function displaySubmittedData(formId) {
+                const fileListElement = document.getElementById(`valuation_file_list_${formId}`);
+                displayFiles(allFiles, fileListElement);
+            }
+        });
+    </script>
+    
+    
+    
+    
+    
+
+{% endblock content %}

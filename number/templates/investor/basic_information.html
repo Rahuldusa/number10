@@ -1,0 +1,709 @@
+{% include 'admin/company_profile.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Profile</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+     body {
+    overflow-y: auto; /* This hides the scrollbar */
+    height: 100%; /* Ensures the entire body height is considered */
+}
+
+body::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and other WebKit-based browsers */
+}
+.btn-custom {
+      background-color: transparent; /* Set background color */
+      border: none;
+     
+      /* border-radius: 10px; */
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center; /* Center the image and text vertically */
+      gap: 10px; /* Gap between image and text */
+      margin-left: 98% !important;
+    }.btn-custom img {
+      width: 40px;
+      height: auto;
+    }
+
+        .container {
+            max-width: 80%;
+            padding: 40px;
+            height: 600px;
+            margin-left: 220px;
+            margin-top: -100px !important;
+            scrollbar-width: none; 
+            font-family: 'Arial MT Rounded' !important;
+            
+        }
+        .container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .breadcrumb {
+            font-size: 0.9em;
+            color: grey;
+        }
+        .info-block {
+            margin-bottom: none;
+            border:none !important;
+        }
+        .label-and-value {
+            display: block;
+        }
+        label {
+            flex: 0 0 100px;
+            color: rgb(160, 158, 158);
+            font-size: 12px;
+            margin-right: 2px; 
+            margin-bottom: 0px !important;
+        }
+        .editable {
+            padding: 0;
+            font-weight: regular;
+            border: none;
+            background-color: transparent;
+            font-size: 16px;
+            text-align: left;
+            border-bottom: 1px solid transparent;
+            outline: none;
+            cursor: text;
+            flex: 1;
+            word-wrap: break-word;
+            margin-top: -8px;
+        }
+        .editable[contenteditable="true"] {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+        }
+        .editable[contenteditable="false"] {
+            border-bottom: none !important;
+            padding-bottom: 2px;
+        }
+        .revenue-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .revenue-block {
+            display: flex;
+            align-items: center;
+            width: 45%;
+        }
+        .revenue-block span {
+            margin-right: 5px;
+        }
+        .editable {
+            min-width: 100px;
+            border-bottom: none; /* Create underline for the editable fields */
+        }
+        .actions {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #edit-btn {
+    background-color: white;
+    color: black;
+    margin-top: 0px;
+    outline: none !important;
+    box-shadow: none !important; /* Remove the box shadow */
+    border: none !important; /* Remove the border */
+    padding: 0; /* Adjust padding if necessary */
+    margin-right: 70%;
+}
+
+        #save-btn {
+            background-color: white;
+            color: green;
+            display: none;
+            margin-top: 0px;
+            outline: none !important;
+            box-shadow: none !important; /* Remove the box shadow */
+            border: none !important; /* Remove the border */
+            padding: 0; /* Adjust padding if necessary */
+            margin-right: 70%;
+        }
+        .breadcrumb{
+            font-size: 18px;
+            color: black;
+            flex:1;
+            margin-top: 25px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded';
+        }
+        .actions {
+            margin-left: auto;
+        }
+        .bold-text {
+            font-weight: bold;
+        }
+        .p {
+        margin-bottom: 5px; /* Adjust this value as needed */
+        }
+        .a {
+    text-decoration: none;
+        }
+        #industry-select {
+    appearance: none;  /* Removes default system styling */
+    -webkit-appearance: none;  /* For Chrome, Safari, and Opera */
+    -moz-appearance: none;  /* For Firefox */
+    background-color: transparent;  /* Sets a transparent background */
+    border-bottom: 1px solid hsla(0, 0%, 78%, 0.5);   /* Removes the border */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px !important;
+    padding: 8px 32px 8px 8px;  /* Pads the dropdown but leaves space for the icon */
+    font-size: 16px;  /* Sets the text size */
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /%3E%3C/svg%3E');
+    background-repeat: no-repeat;  /* No repeat on the background icon */
+    background-position: right 8px center;  /* Positions the icon on the right, centered vertically */
+    background-size: 20px;  /* Icon size */
+    cursor: pointer;  /* Changes the cursor to indicate it's clickable */
+}
+
+#industry-select:focus {
+    outline: none;  /* Removes the outline when focused */
+}
+#business-type-select {
+    appearance: none;  /* Removes default system styling */
+    -webkit-appearance: none;  /* For Chrome, Safari, and Opera */
+    -moz-appearance: none;  /* For Firefox */
+    background-color: transparent;  /* Sets a transparent background */
+    border-bottom: 1px solid hsla(0, 0%, 78%, 0.5);   /* Removes the border */
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0px !important;
+    padding: 8px 32px 8px 8px;  /* Pads the dropdown but leaves space for the icon */
+    font-size: 16px;  /* Sets the text size */
+    background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"%3E%3Cpath fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /%3E%3C/svg%3E');
+    background-repeat: no-repeat;  /* No repeat on the background icon */
+    background-position: right 8px center;  /* Positions the icon on the right, centered vertically */
+    background-size: 20px;  /* Icon size */
+    cursor: pointer;  /* Changes the cursor to indicate it's clickable */
+}
+
+#business-type-select:focus {
+    outline: none;  /* Removes the outline when focused */
+}
+    </style>
+</head>
+<body>
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Profile</span>
+    </div>
+    <div class="container mt-4">
+        <header class="header">
+            <div class="actions text-end">
+                <button id="edit-btn" class="btn btn-custom"><img src="{% static 'images/edit.png' %}"></button>
+                
+                <button id="save-btn" class="btn btn-custom"> <img src="{% static 'images/save.png' %}"></button>
+            </div>
+        </header >
+        <main class="row">
+            <section class="col-md-6">
+                <div class="info-block">
+                    <label for="company-name" style="display: block; margin-bottom: 5px;">Company Name:</label>
+                    <input id="company-name" name="company-name" class="editable" type="text" value="{{ company.name|default_if_none:'' }}">
+                </div>
+                
+                <div class="info-block">
+                    <label for="founded-in" style="display: block; margin-bottom: 5px;">Founded In (Year):</label>
+                    <p id="founded-in" class="editable" style="display: block; margin-top: 5px;">{{ company.date_of_incorporation|default_if_none:'' }}</p>
+                </div>
+                
+                <div class="info-block">
+                    <label for="business-type">Type of Business:</label>
+                    <p id="business-type-display" class="editable">{{ company.business_type|default:"" }}</p>
+                    <select id="business-type-select" class="form-select" style="display: none;">
+                        <option value="" disabled selected>Select Type of Business</option>
+                        <option value="B2B (Business to Business)">B2B (Business to Business)</option>
+                        <option value="B2G (Business to Government)">B2G (Business to Government)</option>
+                        <option value="B2C (Business to Consumer)">B2C (Business to Consumer)</option>
+                        <option value="B2B2B (Business to Business to Business)">B2B2B (Business to Business to Business)</option>
+                        <option value="D2C (Direct to Consumer)">D2C (Direct to Consumer)</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div class="info-block">
+                    <label for="business-type">Type of Industry:</label>
+                    <p id="industry-display" class="editable">{{ company.sector|default:"" }}</p>
+
+                    <select id="industry-select" class="form-select" style="display: none;">
+                        <option value="">Select Industry / Sector</option>
+                        <option value="2/3 Wheelers">2/3 Wheelers</option>
+                        <option value="Abrasives & Bearings">Abrasives & Bearings</option>
+                        <option value="Advertising & Media Agencies">Advertising & Media Agencies</option>
+                        <option value="Aerospace & Defense">Aerospace & Defense</option>
+                        <option value="Airline">Airline</option>
+                        <option value="Airport & Airport services">Airport & Airport services</option>
+                        <option value="Aluminium">Aluminium</option>
+                        <option value="Aluminium, Copper & Zinc Products">Aluminium, Copper & Zinc Products</option>
+                        <option value="Amusement Parks/ Other Recreation">Amusement Parks/ Other Recreation</option>
+                        <option value="Animal Feed">Animal Feed</option>
+                        <option value="Asset Management Company">Asset Management Company</option>
+                        <option value="Auto Components & Equipments">Auto Components & Equipments</option>
+                        <option value="Auto -Dealer">Auto -Dealer</option>
+                        <option value="Biotechnology">Biotechnology</option>
+                        <option value="Breweries & Distilleries">Breweries & Distilleries</option>
+                        <option value="Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)">Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)</option>
+                        <option value="Cables - Electricals">Cables - Electricals</option>
+                        <option value="Castings & Forgings">Castings & Forgings</option>
+                        <option value="Cement & Cement Products">Cement & Cement Products</option>
+                        <option value="Ceramics">Ceramics</option>
+                        <option value="Cigarettes & Tobacco Products">Cigarettes & Tobacco Products</option>
+                        <option value="Civil Construction">Civil Construction</option>
+                        <option value="Coal">Coal</option>
+                        <option value="Commercial Vehicles">Commercial Vehicles</option>
+                        <option value="Commodity Chemicals">Commodity Chemicals</option>
+                        <option value="Compressors, Pumps & Diesel Engines">Compressors, Pumps & Diesel Engines</option>
+                        <option value="Computers - Software & Consulting">Computers - Software & Consulting</option>
+                        <option value="Computers Hardware & Equipments">Computers Hardware & Equipments</option>
+                        <option value="Construction Vehicles">Construction Vehicles</option>
+                        <option value="Consulting Services">Consulting Services</option>
+                        <option value="Consumer Electronics">Consumer Electronics</option>
+                        <option value="Copper">Copper</option>
+                        <option value="Dairy Products">Dairy Products</option>
+                        <option value="Data Processing Services">Data Processing Services</option>
+                        <option value="Depositories, Clearing Houses and Other Intermediaries">Depositories, Clearing Houses and Other Intermediaries</option>
+                        <option value="Digital Entertainment">Digital Entertainment</option>
+                        <option value="Distributors">Distributors</option>
+                        <option value="Diversified">Diversified</option>
+                        <option value="Diversified Commercial Services">Diversified Commercial Services</option>
+                        <option value="Diversified consumer products">Diversified consumer products</option>
+                        <option value="Diversified FMCG">Diversified FMCG</option>
+                        <option value="Diversified Metals">Diversified Metals</option>
+                        <option value="Diversified Retail">Diversified Retail</option>
+                        <option value="Dredging">Dredging</option>
+                        <option value="Dyes And Pigments">Dyes And Pigments</option>
+                        <option value="Edible Oil">Edible Oil</option>
+                        <option value="Education">Education</option>
+                        <option value="E-Learning">E-Learning</option>
+                        <option value="Electrodes & Refractories">Electrodes & Refractories</option>
+                        <option value="Electronic Media">Electronic Media</option>
+                        <option value="E-Retail/ E-Commerce">E-Retail/ E-Commerce</option>
+                        <option value="Exchange and Data Platform">Exchange and Data Platform</option>
+                        <option value="Explosives">Explosives</option>
+                        <option value="Ferro & Silica Manganese">Ferro & Silica Manganese</option>
+                        <option value="Fertilizers">Fertilizers</option>
+                        <option value="Film Production, Distribution & Exhibition">Film Production, Distribution & Exhibition</option>
+                        <option value="Financial Institution">Financial Institution</option>
+                        <option value="Financial Products Distributor">Financial Products Distributor</option>
+                        <option value="Financial Technology (Fintech)">Financial Technology (Fintech)</option>
+                        <option value="Footwear">Footwear</option>
+                        <option value="Forest Products">Forest Products</option>
+                        <option value="Furniture, Home Furnishing">Furniture, Home Furnishing</option>
+                        <option value="Furniture, Home Furnishing, Flooring">Furniture, Home Furnishing, Flooring</option>
+                        <option value="Garments & Apparels">Garments & Apparels</option>
+                        <option value="Gas Transmission/Marketing">Gas Transmission/Marketing</option>
+                        <option value="Gems, Jewellery And Watches">Gems, Jewellery And Watches</option>
+                        <option value="General Insurance">General Insurance</option>
+                        <option value="Glass - Consumer">Glass - Consumer</option>
+                        <option value="Glass - Industrial">Glass - Industrial</option>
+                        <option value="Granites & Marbles">Granites & Marbles</option>
+                        <option value="Healthcare Research, Analytics & Technology">Healthcare Research, Analytics & Technology</option>
+                        <option value="Healthcare Service Provider">Healthcare Service Provider</option>
+                        <option value="Heavy Electrical Equipment">Heavy Electrical Equipment</option>
+                        <option value="Holding Company">Holding Company</option>
+                        <option value="Hospital">Hospital</option>
+                        <option value="Hotels & Resorts">Hotels & Resorts</option>
+                        <option value="Household Appliances">Household Appliances</option>
+                        <option value="Household Products">Household Products</option>
+                        <option value="Houseware">Houseware</option>
+                        <option value="Housing Finance Company">Housing Finance Company</option>
+                        <option value="Industrial Gases">Industrial Gases</option>
+                        <option value="Industrial Machinery">Industrial Machinery</option>
+                        <option value="Industrial Minerals">Industrial Minerals</option>
+                        <option value="Industrial Products">Industrial Products</option>
+                        <option value="Integrated Power Utilities">Integrated Power Utilities</option>
+                        <option value="Internet & Catalogue Retail">Internet & Catalogue Retail</option>
+                        <option value="Investment Company">Investment Company</option>
+                        <option value="Iron & Steel">Iron & Steel</option>
+                        <option value="Iron & Steel Products">Iron & Steel Products</option>
+                        <option value="IT Enabled Services">IT Enabled Services</option>
+                        <option value="Jute & Jute Products">Jute & Jute Products</option>
+                        <option value="Leather And Leather Products">Leather And Leather Products</option>
+                        <option value="Leisure Products">Leisure Products</option>
+                        <option value="Life Insurance">Life Insurance</option>
+                        <option value="Logistics Solution Provider">Logistics Solution Provider</option>
+                        <option value="LPG/CNG/PNG/LNG Supplier">LPG/CNG/PNG/LNG Supplier</option>
+                        <option value="Lubricants">Lubricants</option>
+                        <option value="Meat Products including Poultry">Meat Products including Poultry</option>
+                        <option value="Media & Entertainment">Media & Entertainment</option>
+                        <option value="Medical Equipment & Supplies">Medical Equipment & Supplies</option>
+                        <option value="Microfinance Institutions">Microfinance Institutions</option>
+                        <option value="Mutual Fund Scheme - ETF">Mutual Fund Scheme - ETF</option>
+                        <option value="Non Banking Financial Company (NBFC)">Non Banking Financial Company (NBFC)</option>
+                        <option value="Offshore Support Solution Drilling">Offshore Support Solution Drilling</option>
+                        <option value="Oil Equipment & Services">Oil Equipment & Services</option>
+                        <option value="Oil Exploration & Production">Oil Exploration & Production</option>
+                        <option value="Other Agricultural Products">Other Agricultural Products</option>
+                        <option value="Other Bank">Other Bank</option>
+                        <option value="Other Beverages">Other Beverages</option>
+                        <option value="Other Capital Market related Services">Other Capital Market related Services</option>
+                        <option value="Other Construction Materials">Other Construction Materials</option>
+                        <option value="Other Consumer Services">Other Consumer Services</option>
+                        <option value="Other Electrical Equipment">Other Electrical Equipment</option>
+                        <option value="Other Financial Services">Other Financial Services</option>
+                        <option value="Other Food Products">Other Food Products</option>
+                        <option value="Other Industrial Products">Other Industrial Products</option>
+                        <option value="Other Telecom Services">Other Telecom Services</option>
+                        <option value="Other Textile Products">Other Textile Products</option>
+                        <option value="Other Utilities">Other Utilities</option>
+                        <option value="Packaged Foods">Packaged Foods</option>
+                        <option value="Packaging">Packaging</option>
+                        <option value="Paints">Paints</option>
+                        <option value="Paper & Paper Products">Paper & Paper Products</option>
+                        <option value="Passenger Cars & Utility Vehicles">Passenger Cars & Utility Vehicles</option>
+                        <option value="Personal Care">Personal Care</option>
+                        <option value="Pesticides & Agrochemicals">Pesticides & Agrochemicals</option>
+                        <option value="Petrochemicals">Petrochemicals</option>
+                        <option value="Pharmaceuticals">Pharmaceuticals</option>
+                        <option value="Pharmacy Retail">Pharmacy Retail</option>
+                        <option value="Pig Iron">Pig Iron</option>
+                        <option value="Plastic Products - Consumer">Plastic Products - Consumer</option>
+                        <option value="Plastic Products - Industrial">Plastic Products - Industrial</option>
+                        <option value="Plywood Boards/ Laminates">Plywood Boards/ Laminates</option>
+                        <option value="Port & Port services">Port & Port services</option>
+                        <option value="Power - Transmission">Power - Transmission</option>
+                        <option value="Power Generation">Power Generation</option>
+                        <option value="Power Trading">Power Trading</option>
+                        <option value="Precious Metals">Precious Metals</option>
+                        <option value="Print Media">Print Media</option>
+                        <option value="Printing & Publication">Printing & Publication</option>
+                        <option value="Private Sector Bank">Private Sector Bank</option>
+                        <option value="Public Sector Bank">Public Sector Bank</option>
+                        <option value="Railway Wagons">Railway Wagons</option>
+                        <option value="Ratings">Ratings</option>
+                        <option value="Real Estate Investment Trusts (REITs)">Real Estate Investment Trusts (REITs)</option>
+                        <option value="Real Estate related services">Real Estate related services</option>
+                        <option value="Refineries & Marketing">Refineries & Marketing</option>
+                        <option value="Residential, Commercial Projects">Residential, Commercial Projects</option>
+                        <option value="Restaurants">Restaurants</option>
+                        <option value="Road Assets–Toll, Annuity, Hybrid-Annuity">Road Assets–Toll, Annuity, Hybrid-Annuity</option>
+                        <option value="Road Transport">Road Transport</option>
+                        <option value="Rubber">Rubber</option>
+                        <option value="Sanitary Ware">Sanitary Ware</option>
+                        <option value="Seafood">Seafood</option>
+                        <option value="Ship Building & Allied Services">Ship Building & Allied Services</option>
+                        <option value="Shipping">Shipping</option>
+                        <option value="Software Products">Software Products</option>
+                        <option value="Speciality Retail">Speciality Retail</option>
+                        <option value="Specialty Chemicals">Specialty Chemicals</option>
+                        <option value="Sponge Iron">Sponge Iron</option>
+                        <option value="Stationary">Stationary</option>
+                        <option value="Stockbroking & Allied">Stockbroking & Allied</option>
+                        <option value="Sugar">Sugar</option>
+                        <option value="Tea & Coffee">Tea & Coffee</option>
+                        <option value="Telecom - Equipment & Accessories">Telecom - Equipment & Accessories</option>
+                        <option value="Telecom - Cellular & Fixed line services">Telecom - Cellular & Fixed line services</option>
+                        <option value="Telecom - Infrastructure">Telecom - Infrastructure</option>
+                        <option value="Tour, Travel Related Services">Tour, Travel Related Services</option>
+                        <option value="Tractors">Tractors</option>
+                        <option value="Trading - Chemicals">Trading - Chemicals</option>
+                        <option value="Trading - Metals">Trading - Metals</option>
+                        <option value="Trading - Minerals">Trading - Minerals</option>
+                        <option value="Trading - Textile Products">Trading - Textile Products</option>
+                        <option value="Trading & Distributors">Trading & Distributors</option>
+                        <option value="Trading Coal">Trading Coal</option>
+                        <option value="Transport Related Services">Transport Related Services</option>
+                        <option value="TV Broadcasting & Software Production">TV Broadcasting & Software Production</option>
+                        <option value="Tyres & Rubber Products">Tyres & Rubber Products</option>
+                        <option value="Waste Management">Waste Management</option>
+                        <option value="Water Supply & Management">Water Supply & Management</option>
+                        <option value="Wellness">Wellness</option>
+                        <option value="Zinc">Zinc</option>
+                    </select>
+                </div>
+                <div class="info-block">
+                    <label for="number-of-employees">Number of Employees:</label>
+                    <p id="number-of-employees" class="editable">{{ company.no_of_employees }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="address">Address:</label>
+                    <p id="address" class="editable">{{ company.location }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="website">Online Presence(URL):</label>
+                    <p id="website" class="editable">{{ company.website_url }}</p>
+                    <span id="website-error" style="color: red; font-size: 12px; display: none;">Invalid URL format</span>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="linkedin">LinkedIn:</label>
+                    <p id="linkedin" class="editable">{{ company.linkedin_url }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="email">Email:</label>
+                    <p id="email" class="editable">{{ company.email }}</p>
+                </div>
+                <div class="info-block label-and-value">
+                    <label for="phone">Contact Number:</label>
+                    <p id="phone" class="editable">{{ company.phone }}</p>
+                    <span id="phone-error" style="color: red; font-size: 12px; display: none;">Invalid phone number</span>
+                </div>
+            </section>
+            <section class="col-md-6">
+                <div class="info-block">
+                    <label for="company-vision">Company Vision:</label>
+                    <p id="company-vision" class="editable">{{ company.vision }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="products-services">Products & Services:</label>
+                    <p id="products-services" class="editable">{{ company.products }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="key-competitors">Key Competitors:</label>
+                    <p id="key-competitors" class="editable">{{ company.competitor }}</p>
+                </div>
+                <div class="info-block" style="margin-bottom: 15px;">
+                    <label for="revenue-profit">Three Year Revenue & Profit (INR lacs):</label>
+                    <p></p>
+                    <p> Current year revenue</p>
+                    <!-- Current Year -->
+                    <div class="revenue-row">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <input id="revenue_current_year" name="revenue_current_year" class="editable" type="number" step="any" value="{{ company.current_revenue }}">
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <input id="profit_current_year" name="profit_current_year" class="editable" type="number" step="any" value="{{ company.current_pl }}">
+                        </div>
+                    </div>
+                    
+                    <p>Previous year revenue</p>
+                    <div class="revenue-row">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <input id="revenue_previous_year" name="revenue_previous_year" class="editable" type="number" step="any" value="{{ company.previous_revenue }}">
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <input id="profit_previous_year" name="profit_previous_year" class="editable" type="number" step="any" value="{{ company.previous_pl }}">
+                        </div>
+                    </div>
+                    
+                    <p>A year before previous year revenue</p>
+                    <div class="revenue-row" style="margin-bottom: 5px;">
+                        <div class="revenue-block">
+                            <span>Revenue = </span>
+                            <input id="revenue_year_before" name="revenue_year_before" class="editable" type="number" step="any" value="{{ company.a_yearbefore_revenue }}">
+                        </div>
+                        <div class="revenue-block">
+                            <span>P/L = </span>
+                            <input id="profit_year_before" name="profit_year_before" class="editable" type="number" step="any" value="{{ company.a_yearbefore_pl }}">
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+                <div class="info-block">
+                    <label for="number-of-customers">Number of Customers:</label>
+                    <p id="number-of-customers" class="editable">{{ company.customers }}</p>
+                </div>
+                <div class="info-block">
+                    <label for="additional-info">Additional Information:</label>
+                    <p id="additional-info" class="editable">{{ company.additional }}</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+   
+    <script>
+       // Edit button handler
+       document.getElementById('save-btn').addEventListener('click', async function() {
+    const url = "{% url 'basic_information' company.company_id %}";
+    const data = {};
+
+    // Collecting data from dropdowns
+    const industrySelect = document.getElementById('industry-select');
+    const businessSelect = document.getElementById('business-type-select');
+    
+    if (industrySelect.style.display !== 'none') {
+        data['industry-select'] = industrySelect.value;
+    }
+    if (businessSelect.style.display !== 'none') {
+        data['business-type-select'] = businessSelect.value;
+    }
+
+    // Collecting data from other editable fields
+    data['company-name'] = document.getElementById('company-name').value;
+    data['founded-in'] = document.getElementById('founded-in').textContent.trim();
+    data['number-of-employees'] = document.getElementById('number-of-employees').textContent.trim();
+    data['address'] = document.getElementById('address').textContent.trim();
+    data['website'] = document.getElementById('website').textContent.trim();
+    data['linkedin'] = document.getElementById('linkedin').textContent.trim();
+    data['email'] = document.getElementById('email').textContent.trim();
+    data['phone'] = document.getElementById('phone').textContent.trim();
+    data['company-vision'] = document.getElementById('company-vision').textContent.trim();
+    data['products-services'] = document.getElementById('products-services').textContent.trim();
+    data['key-competitors'] = document.getElementById('key-competitors').textContent.trim();
+    data['number-of-customers'] = document.getElementById('number-of-customers').textContent.trim();
+    data['additional-info'] = document.getElementById('additional-info').textContent.trim();
+
+    // Collecting revenue and profit data
+    data['revenue_current_year'] = document.getElementById('revenue_current_year').value;
+    data['profit_current_year'] = document.getElementById('profit_current_year').value;
+    data['revenue_previous_year'] = document.getElementById('revenue_previous_year').value;
+    data['profit_previous_year'] = document.getElementById('profit_previous_year').value;
+    data['revenue_year_before'] = document.getElementById('revenue_year_before').value;
+    data['profit_year_before'] = document.getElementById('profit_year_before').value;
+
+    // Fetch call to save the data
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            alert('Details saved successfully!');
+            document.querySelectorAll('.editable').forEach(function(el) {
+                el.setAttribute('contenteditable', 'false');
+                el.style.borderBottom = 'none'; // Remove underline after save for text fields
+            });
+
+            // Additional step to remove bottom borders from dropdowns
+            industrySelect.style.borderBottom = 'none';
+            businessSelect.style.borderBottom = 'none';
+
+            // Hide the dropdowns and display the paragraph text
+            document.getElementById('industry-display').textContent = industrySelect.options[industrySelect.selectedIndex].text;
+            document.getElementById('business-type-display').textContent = businessSelect.options[businessSelect.selectedIndex].text;
+
+            industrySelect.style.display = 'none';
+            businessSelect.style.display = 'none';
+            document.getElementById('industry-display').style.display = 'block';
+            document.getElementById('business-type-display').style.display = 'block';
+
+            document.getElementById('edit-btn').style.display = 'inline-block';
+            document.getElementById('save-btn').style.display = 'none';
+        } else {
+            const errorData = await response.json();
+            alert('Error: ' + errorData.error);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+
+
+function validateForm() {
+        const website = document.getElementById('website').textContent.trim();
+        const phone = document.getElementById('phone').textContent.trim();
+        const saveButton = document.getElementById('save-btn');
+
+        // Check if both URL and phone number are valid
+        const isValidWebsite = validateURL(website) || website === ""; // Allow empty field
+        const isValidPhone = validatePhoneNumber(phone);
+
+        // Disable the save button if either is invalid
+        saveButton.disabled = !(isValidWebsite && isValidPhone);
+    }
+
+    // URL Validation
+    document.getElementById('website').addEventListener('input', function() {
+        const url = this.textContent.trim();
+        const errorSpan = document.getElementById('website-error');
+
+        if (!validateURL(url) && url !== "") {
+            this.style.borderBottom = '1px solid red'; // Highlight invalid URL
+            errorSpan.style.display = 'block'; // Show error message
+        } else {
+            this.style.borderBottom = '1px solid #ccc'; // Reset valid URL
+            errorSpan.style.display = 'none'; // Hide error message
+        }
+        validateForm(); // Re-validate form on input change
+    });
+
+    // Phone validation on input
+    document.getElementById('phone').addEventListener('input', function() {
+        const phone = this.textContent.trim();
+        const errorSpan = document.getElementById('phone-error');
+        
+        if (!validatePhoneNumber(phone)) {
+            this.style.borderBottom = '1px solid red'; // Highlight invalid phone number
+            errorSpan.style.display = 'block'; // Show error message
+        } else {
+            this.style.borderBottom = '1px solid #ccc'; // Reset valid phone number
+            errorSpan.style.display = 'none'; // Hide error message
+        }
+        validateForm(); // Re-validate form on input change
+    });
+
+    // Phone Number Validation function
+    function validatePhoneNumber(phone) {
+        const phonePattern = /^[6-9]\d{9}$/; // Starts with 6-9, exactly 10 digits
+        return phonePattern.test(phone);
+    }
+
+    // URL Validation function
+    function validateURL(url) {
+        const pattern = new RegExp('^(https?:\\/\\/)?'+ 
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ 
+            '((\\d{1,3}\\.){3}\\d{1,3}))'+ 
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ 
+            '(\\?[;&a-z\\d%_.~+=-]*)?'+ 
+            '(\\#[-a-z\\d_]*)?$','i'); 
+        return !!pattern.test(url);
+    }
+
+    // Initial form validation on page load
+    document.addEventListener("DOMContentLoaded", validateForm);
+
+document.getElementById('edit-btn').addEventListener('click', function() {
+    document.querySelectorAll('.editable').forEach(function(editable) {
+        editable.setAttribute('contenteditable', 'true');
+        // Add underline to show editability
+    });
+    document.getElementById('industry-select').style.display = 'none';
+    document.getElementById('business-type-select').style.display = 'none';
+
+    // Toggle display for selects
+    const industryP = document.getElementById('industry-display');
+    const businessP = document.getElementById('business-type-display');
+    const industrySelect = document.getElementById('industry-select');
+    const businessSelect = document.getElementById('business-type-select');
+
+    industryP.style.display = 'none';
+    industrySelect.style.display = 'block';
+    businessP.style.display = 'none';
+    businessSelect.style.display = 'block';
+
+    industrySelect.value = industryP.textContent.trim();
+    businessSelect.value = businessP.textContent.trim();
+
+    document.getElementById('edit-btn').style.display = 'none';
+    document.getElementById('save-btn').style.display = 'inline-block';
+});
+
+    </script>
+    
+</body>
+</html>
+{% endblock content %}

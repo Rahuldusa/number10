@@ -1,0 +1,891 @@
+
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        body {
+            /* overflow-y: scroll; */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10; /* Ensure it stays above other elements */
+    }
+        html::-webkit-scrollbar {
+            display: none;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: rgb(156, 155, 155);
+            margin-bottom: 0px;
+        }
+
+        .form-control {
+            border: none;
+            border-bottom: 1px solid #000;
+            background-color: transparent;
+            border-radius: 0;
+            padding-left: 0;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .form-control:disabled {
+    background:transparent; 
+}
+
+        .container {
+            position:relative;
+            /* padding: 30px 20px; */
+            background-color: #fff;
+            border-radius: 8px;
+            max-width: 1000px;
+            margin-left: 238px;
+            overflow-y: auto;
+            /* height: calc(100vh - 100px); */
+            font-family: 'Arial MT Rounded';
+            z-index: 1;
+            overflow-x: hidden;
+            margin-top: -40px;
+            padding-bottom: 30px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .container1 {
+            position: relative;
+            padding: 0px 20px;
+            background:transparent;
+            border-radius: 8px;
+            max-width: 1000px !important;
+            margin-left: 238px;
+            overflow-y: auto;
+            font-family: 'Arial MT Rounded';
+            z-index: 1;
+            overflow-x: hidden;
+            margin-top: 0px;
+            padding-top: 0px !important;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .container1::-webkit-scrollbar {
+            display: none;
+        }
+
+        .container1 {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .plus-icon {
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #7b7b7b;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .plus-icon.uploaded {
+            margin-top: 10px;
+        }
+
+        .plus-icon:hover {
+            color: #000000;
+            transform: scale(1.2);
+        }
+
+        .card-wrapper {
+            position: relative;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .card-header {
+            background-color: #fff;
+            padding: 10px;
+        }
+
+        .card-body {
+            padding: 30px;
+            text-align: center;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            max-height: 350px;
+            overflow-y: auto;
+        }
+
+        .file-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            list-style-type: none;
+            padding-left: 0;
+            width: 100%;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+
+        .file-item {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-actions .btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+
+        .buttons-container {
+            display: flex;
+            justify-content: flex-end;
+           
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            background-color: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 1180px;
+            margin-top: -37px;
+        }
+
+        .btn-custom img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .breadcrumb {
+            margin-top: 92px;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded';
+            font-size: 18px !important;
+        }
+
+        /* Tooltip wrapper */
+.btn-custom-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    position: absolute;
+    top: -35px; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+/* Show tooltip on button hover */
+.btn-custom-wrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+.edit-btn img{
+    width: 35px;
+    height:35px;
+    background-color: transparent !important;
+}
+
+.delete-btn img{
+    width: 35px;
+    height:35px;
+    background-color: transparent !important;
+}
+.save-btn img{
+    width: 35px;
+    height:35px;
+    background-color: transparent !important;
+}
+.cancel-btn img{
+    width: 35px;
+    height:35px;
+    background-color: transparent !important;
+}
+
+        @media (max-width: 991px) {
+            .container, .container1 {
+                margin-left: 0px;
+                width: 100%;
+                padding: 10px;
+                max-width: 100%;
+                margin-top: 20px;
+            }
+
+            .breadcrumb {
+                display: none;
+            }
+
+            .btn-custom {
+                margin-left: 0px;
+            }
+
+            .file-item {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span class="bold-text">Valuation</span>
+        <button class="btn btn-custom" id="add-benchmark-btn" title="Add a new Valuation"><img src="{% static 'images/add.png' %}" alt="Add" ></button>    
+    </div>  
+    <div id="sections-container" class="container"></div>
+    <div class="container1">
+     
+        
+        {% if valuations %}
+            <div id="valuations-container">
+                {% for valuation in valuations %}
+                    <form id="bench_form_{{ valuation.id }}" class="content-area new-form-section" enctype="multipart/form-data">
+                        <input type="hidden" name="company_id" value="{{ company.company_id }}">
+                        <input type="hidden" name="valuation_id" value="{{ valuation.id }}">
+                        
+                        <div class="row">
+                            <!-- Product Dropdown (Disabled for Display) -->
+                            <div class="col-md-12">
+                                <label for="p_name_{{ forloop.counter }}" class="form-label">Product</label>
+                                <select id="p_name_{{ forloop.counter }}" name="p_name" class="form-control" disabled>
+                                    <option value="{{ valuation.product.id }}">{{ valuation.product.name }}</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Current Valuation -->
+                            <div class="col-md-4">
+                                <label for="valuation_{{ forloop.counter }}" class="form-label">Current Valuation</label>
+                                <input type="number" id="valuation_{{ forloop.counter }}" name="valuation" value="{{ valuation.current_valuation }}" class="form-control" disabled>
+                            </div>
+                            
+                            <!-- Valuation Source -->
+                            <div class="col-md-4">
+                                <label for="source_{{ forloop.counter }}" class="form-label">Valuation Source / Vendor</label>
+                                <input type="text" id="source_{{ forloop.counter }}" name="source" value="{{ valuation.valuation_source }}" class="form-control" disabled>
+                            </div>
+                            
+                            <!-- Valuation Date -->
+                            <div class="col-md-4">
+                                <label for="valuation_dt_{{ forloop.counter }}" class="form-label">Valuation Date</label>
+                               <input type="date" id="valuation_dt_{{ valuation.id }}" name="valuation_date" value="{{ valuation.valuation_date|date:"Y-m-d" }}" class="form-control" disabled>
+
+                            </div>
+                        </div>
+                        
+                        <!-- Associated Documents Section -->
+<div class="col-lg-12">
+    <div class="card card-wrapper">
+        <div class="card-header">
+            <p>Valuation Documents<br><small>&lt;&lt; Upload PDF format &gt;&gt;</small></p>
+        </div>
+        <div class="card-body">
+            <ul class="file-list">
+                {% for doc in docs %}
+                    {% if doc.valuation == valuation %}
+                        <li class="file-item">
+                            <span class="file-name">{{ doc.document.name }}</span>
+                            <div class="file-actions">
+                                <a href="{{ doc.document.url }}" target="_blank" class="btn btn-primary btn-sm">Open</a>
+                                <button type="button" class="btn btn-danger btn-sm remove-file-btn" data-file-id="{{ doc.id }}" style="display: none;">Remove</button>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="plus-icon" id="valuation-plus-icon_{{ valuation.id }}" style="display: none;">
+                <i class="fas fa-plus"></i>
+                <input type="file" accept=".pdf" name="valuation_files" id="valuation_doc_{{ valuation.id }}" class="file-input pdf-upload" multiple style="display: none;">
+            </div>
+            <ul class="file-list" id="valuation_file_list_{{ valuation.id }}"></ul>
+            
+        </div>
+    </div>
+</div>
+
+                        
+                        <!-- Edit and Remove Buttons -->
+                        <div class="buttons-container">
+                            <!-- Edit and Delete Buttons (Visible by default) -->
+                            <button type="button" class="btn custom edit-btn" onclick="enableEditForm({{ valuation.id }})" title="Edit Valuation Details">
+                                <img src="{% static 'images/edit.png' %}" alt="edit">
+                            </button>
+                            <button type="button" class="btn custom delete-btn" onclick="remove({{ valuation.id }})" title="Delete Valuation">
+                                <img src="{% static 'images/delete.png' %}" alt="delete">
+                            </button>
+                        
+                            <!-- Save and Cancel Buttons (Hidden by default) -->
+                            <button type="button" class="btn custom save-btn" onclick="saveEditForm({{ valuation.id }})" title="Save Edited Details" style="display: none;"><img src="{% static 'images/save.png' %}" alt="save"></button>
+                            <button type="button" class="btn custom cancel-btn" onclick="cancelEditForm({{ valuation.id }})" title="Cancel Edit" style="display: none;"><img src="{% static 'images/cancel.png' %}" alt="cancel"></button>
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+        {% else %}
+            
+        {% endif %}
+    </div>
+    <script>
+  
+
+
+   // Function to remove a valuation section
+// Function to remove a valuation section
+function remove(valuationId) {
+    const form = document.getElementById(`bench_form_${valuationId}`);
+
+    if (!confirm("Are you sure you want to delete this valuation?")) {
+        return;
+    }
+
+    fetch(`/delete_valuation/${valuationId}/`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}', // Django CSRF token
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            window.location.reload()
+            
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Function to add a new form section dynamically
+function addNewForm(formCount) {
+    const newFormHTML = `
+        <form id="bench_form_${formCount}" class="content-area new-form-section" enctype="multipart/form-data">
+            <input type="hidden" name="company_id" value="{{ company.company_id }}">
+            <div class="row">
+                <div class="col-md-12">
+                    <label for="p_name_${formCount}" class="form-label">Product</label>
+                    <select id="p_name_${formCount}" name="p_name" class="form-control">
+                        <option value="">--select--</option>
+                        {% for product in products %}
+                            <option value="{{ product.id }}">{{ product.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="valuation_${formCount}" class="form-label">Current Valuation</label>
+                    <input type="number" id="valuation_${formCount}" name="valuation" class="form-control" required placeholder="Enter valuation">
+                    <span class="error-message" style="display: none; color: red;">Please enter valuation</span>
+                </div>
+                <div class="col-md-4">
+                    <label for="source_${formCount}" class="form-label">Valuation Source / Vendor</label>
+                    <input type="text" id="source_${formCount}" name="source" class="form-control" required placeholder="Enter valuation source">
+                    <span class="error-message" style="display: none; color: red;">Please enter source</span>
+                </div>
+                <div class="col-md-4">
+                    <label for="valuation_dt_${formCount}" class="form-label">Valuation Date</label>
+                    <input type="date" id="valuation_dt_${formCount}" name="valuation_dt" class="form-control" required>
+                    <span class="error-message" style="display: none; color: red;">Please enter a date</span>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card card-wrapper">
+                    <div class="card-header">
+                        <p>Valuation Documents<br><small>&lt;&lt; Upload PDF format &gt;&gt;</small></p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="file-list" id="valuation_file_list_${formCount}"></ul>
+                        <div class="plus-icon" id="valuation-plus-icon_${formCount}">
+                            <i class="fas fa-plus"></i>
+                            <input type="file" accept=".pdf" name="valuation_files" id="valuation_doc_${formCount}" class="file-input pdf-upload" multiple style="display: none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons-container">
+                <button type="button" class="btn btn-primary submit-btn" data-form-id="${formCount}" disabled>Submit</button>
+            </div>
+        </form>
+    `;
+
+    const sectionsContainer = document.getElementById('sections-container');
+    sectionsContainer.insertAdjacentHTML('beforeend', newFormHTML);
+
+    attachFileUploadListeners(formCount);
+    attachSubmitListener(formCount);
+    attachFieldValidation(formCount); // Add validation listener to form fields
+}
+
+// Function to enable/disable submit button based on field validation
+function attachFieldValidation(formId) {
+    const valuationField = document.getElementById(`valuation_${formId}`);
+    const sourceField = document.getElementById(`source_${formId}`);
+    const dateField = document.getElementById(`valuation_dt_${formId}`);
+    const submitButton = document.querySelector(`.submit-btn[data-form-id="${formId}"]`);
+    
+    function validateFields() {
+        let isValid = true;
+
+        // Check each field and show/hide error messages as needed
+        if (!valuationField.value) {
+            showError(valuationField, "Please enter valuation");
+            isValid = false;
+        } else {
+            hideError(valuationField);
+        }
+
+        if (!sourceField.value) {
+            showError(sourceField, "Please enter source");
+            isValid = false;
+        } else {
+            hideError(sourceField);
+        }
+
+        if (!dateField.value) {
+            showError(dateField, "Please enter a date");
+            isValid = false;
+        } else {
+            hideError(dateField);
+        }
+
+        // Enable/disable the submit button based on validation
+        submitButton.disabled = !isValid;
+    }
+
+    // Attach input event listeners for validation
+    [valuationField, sourceField, dateField].forEach(field => {
+        field.addEventListener('input', validateFields);
+    });
+    
+    // Initial validation check
+    validateFields();
+}
+
+function showError(field, message) {
+    const errorElement = field.nextElementSibling;
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+}
+
+function hideError(field) {
+    const errorElement = field.nextElementSibling;
+    errorElement.style.display = 'none';
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    let formCount = 1;
+
+    const addBenchmarkBtn = document.getElementById('add-benchmark-btn');
+    addBenchmarkBtn.addEventListener('click', function () {
+        formCount++;
+        addNewForm(formCount);
+    });
+});
+
+function attachSubmitListener(formId) {
+    const submitBtn = document.querySelector(`.submit-btn[data-form-id="${formId}"]`);
+    submitBtn.addEventListener('click', function () {
+        submitFormData(formId);
+    });
+}
+
+function attachFileUploadListeners(formId) {
+    const valuationPlusIcon = document.getElementById(`valuation-plus-icon_${formId}`);
+    const valuationInput = document.getElementById(`valuation_doc_${formId}`);
+    const valuationFileList = document.getElementById(`valuation_file_list_${formId}`);
+    const fileData = []; // Array to store unique files
+
+    // Open file dialog when the plus icon is clicked
+    valuationPlusIcon.addEventListener('click', function () {
+        valuationInput.click();
+    });
+
+    // Handle file selection
+    valuationInput.addEventListener('change', function () {
+        const newFiles = Array.from(valuationInput.files);
+
+        newFiles.forEach(file => {
+            // Only add if the file is not already in the array
+            if (!fileData.some(existingFile => existingFile.name === file.name)) {
+                fileData.push(file);
+
+                const li = document.createElement('li');
+                li.classList.add('file-item');
+
+                // File name display
+                const fileName = document.createElement('span');
+                fileName.classList.add('file-name');
+                fileName.textContent = file.name;
+
+                // "Open" button
+                const openButton = document.createElement('button');
+                openButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                openButton.textContent = 'Open';
+                openButton.addEventListener('click', function () {
+                    const fileURL = URL.createObjectURL(file);
+                    window.open(fileURL, '_blank');
+                });
+
+                // "Remove" button
+                const removeButton = document.createElement('button');
+                removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', function () {
+                    const index = fileData.indexOf(file);
+                    if (index > -1) {
+                        fileData.splice(index, 1);
+                    }
+                    li.remove();
+                });
+
+                // Actions container
+                const fileActions = document.createElement('div');
+                fileActions.classList.add('file-actions');
+                fileActions.appendChild(openButton);
+                fileActions.appendChild(removeButton);
+
+                // Append elements to the file item
+                li.appendChild(fileName);
+                li.appendChild(fileActions);
+                valuationFileList.appendChild(li);
+            }
+        });
+
+        // Reset file input to allow re-uploading if necessary
+        valuationInput.value = '';
+    });
+
+    // Attach file data to the formData on submission
+    function getFileData() {
+        return fileData;
+    }
+
+    valuationInput.getFileData = getFileData;
+}
+
+function submitFormData(formId) {
+    const form = document.getElementById(`bench_form_${formId}`);
+    const formData = new FormData(form);
+
+    // Retrieve accumulated file data from input's getFileData method
+    const fileData = document.getElementById(`valuation_doc_${formId}`).getFileData();
+
+    // Append each file in fileData to formData
+    fileData.forEach(file => {
+        formData.append('valuation_files', file);
+    });
+
+    fetch(`/add_valuation/${form.querySelector('input[name="company_id"]').value}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            lockForm(formId); // Lock the form on success
+        } else {
+            alert('Error submitting the form.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+
+
+// Lock the form after successful submission
+function lockForm(formId) {
+    const submitBtn = document.querySelector(`.submit-btn[data-form-id="${formId}"]`);
+    submitBtn.style.display = 'none';
+
+    const buttonsContainer = submitBtn.parentElement;
+    const editButtonHTML = `<button type="button" class="btn custom edit-btn" onclick="enableEditForm(${formId})"><img src="{% static 'images/edit.png' %}" alt="edit"></button>`;
+    const deleteButtonHTML = `<button type="button" class="btn custom delete-btn" onclick="remove(${formId})"><img src="{% static 'images/delete.png' %}" alt="delete"></button>`;
+
+    buttonsContainer.insertAdjacentHTML('beforeend', editButtonHTML + deleteButtonHTML);
+}
+
+function displayFiles(files, fileListElement, fileData) {
+    fileListElement.innerHTML = '';
+
+    files.forEach(file => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('file-item');
+
+        const fileName = document.createElement('span');
+        fileName.classList.add('file-name');
+        fileName.textContent = file.name;
+
+        const openButton = document.createElement('button');
+        openButton.classList.add('btn', 'btn-primary', 'btn-sm');
+        openButton.textContent = 'Open';
+        openButton.addEventListener('click', function () {
+            const fileURL = URL.createObjectURL(file);
+            window.open(fileURL, '_blank');
+        });
+
+        const removeButton = document.createElement('button');
+        removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', function () {
+            fileData.delete(file.name);
+            displayFiles(Array.from(fileData.values()), fileListElement, fileData);
+        });
+
+        const fileActions = document.createElement('div');
+        fileActions.classList.add('file-actions');
+        fileActions.appendChild(openButton);
+        fileActions.appendChild(removeButton);
+
+        listItem.appendChild(fileName);
+        listItem.appendChild(fileActions);
+        fileListElement.appendChild(listItem);
+    });
+}
+// Attach file upload listeners with valuationId in edit mode
+function attachFileUploadListeners(valuationId) {
+    const valuationPlusIcon = document.getElementById(`valuation-plus-icon_${valuationId}`);
+    const valuationInput = document.getElementById(`valuation_doc_${valuationId}`);
+    const valuationFileList = document.getElementById(`valuation_file_list_${valuationId}`);
+    const fileData = []; // Array to store unique files
+
+    // Check if elements exist before attaching event listeners
+    if (!valuationPlusIcon || !valuationInput || !valuationFileList) {
+        console.warn(`Elements for valuation ID ${valuationId} are missing; cannot attach file upload listeners.`);
+        return;
+    }
+
+    // Open file dialog when the plus icon is clicked
+    valuationPlusIcon.addEventListener('click', function () {
+        valuationInput.click();
+    });
+
+    // Handle file selection
+    valuationInput.addEventListener('change', function () {
+        const newFiles = Array.from(valuationInput.files);
+
+        newFiles.forEach(file => {
+            if (!fileData.some(existingFile => existingFile.name === file.name)) {
+                fileData.push(file);
+
+                const li = document.createElement('li');
+                li.classList.add('file-item');
+
+                const fileName = document.createElement('span');
+                fileName.classList.add('file-name');
+                fileName.textContent = file.name;
+
+                const openButton = document.createElement('button');
+                openButton.classList.add('btn', 'btn-primary', 'btn-sm');
+                openButton.textContent = 'Open';
+                openButton.addEventListener('click', function () {
+                    const fileURL = URL.createObjectURL(file);
+                    window.open(fileURL, '_blank');
+                });
+
+                const removeButton = document.createElement('button');
+                removeButton.classList.add('btn', 'btn-danger', 'btn-sm');
+                removeButton.textContent = 'Remove';
+                removeButton.addEventListener('click', function () {
+                    const index = fileData.indexOf(file);
+                    if (index > -1) {
+                        fileData.splice(index, 1);
+                    }
+                    li.remove();
+                });
+
+                const fileActions = document.createElement('div');
+                fileActions.classList.add('file-actions');
+                fileActions.appendChild(openButton);
+                fileActions.appendChild(removeButton);
+
+                li.appendChild(fileName);
+                li.appendChild(fileActions);
+                valuationFileList.appendChild(li);
+            }
+        });
+
+        // Reset file input to allow re-uploading if necessary
+        valuationInput.value = '';
+    });
+
+    // Attach file data to formData on submission
+    function getFileData() {
+        return fileData;
+    }
+
+    valuationInput.getFileData = getFileData;
+}
+
+// Enable form for editing and attach file listeners with valuationId
+function enableEditForm(valuationId) {
+    const form = document.getElementById(`bench_form_${valuationId}`);
+    if (!form) {
+        console.error(`Form with ID bench_form_${valuationId} not found.`);
+        return;
+    }
+
+    form.querySelectorAll('input, select').forEach(input => input.disabled = false);
+
+    form.querySelector('.edit-btn').style.display = 'none';
+    form.querySelector('.delete-btn').style.display = 'none';
+    form.querySelector('.save-btn').style.display = 'inline-block';
+    form.querySelector('.cancel-btn').style.display = 'inline-block';
+
+    const plusIcon = form.querySelector('.plus-icon');
+    if (plusIcon) {
+        plusIcon.style.display = 'flex';
+        attachFileUploadListeners(valuationId); // Attach listeners after enabling edit mode
+    }
+
+    form.querySelectorAll('.remove-file-btn').forEach(btn => btn.style.display = 'inline-block');
+}
+
+
+// Submit updated data
+function saveEditForm(valuationId) {
+    const form = document.getElementById(`bench_form_${valuationId}`);
+    const formData = new FormData(form);
+
+    // Retrieve accumulated file data from input's getFileData method
+    const fileData = document.getElementById(`valuation_doc_${valuationId}`).getFileData();
+
+    // Append each file in fileData to formData
+    fileData.forEach(file => {
+        formData.append('valuation_files', file);
+    });
+
+    fetch(`/update_valuation/${valuationId}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        credentials: 'same-origin' // Include cookies with request
+    })
+    .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.json(); // Ensure response is JSON
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            alert(data.message);
+            cancelEditForm(valuationId); // Reset the form to view mode
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Remove individual file during editing
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('remove-file-btn')) {
+        const fileId = event.target.getAttribute('data-file-id');
+        fetch(`/delete_document/${fileId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert(data.message);
+                event.target.closest('.file-item').remove();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
+</script>
+    
+    
+    
+    
+
+{% endblock content %}

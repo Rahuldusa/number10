@@ -1,0 +1,447 @@
+{% include '../base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Information Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Arial MT Rounded';
+            overflow-y: scroll; /* Enable vertical scrolling */
+        }
+
+        /* Hide scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+        body::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* For Firefox */
+        body {
+            scrollbar-width: none;  /* Hide scrollbar in Firefox */
+        }
+
+        /* For Internet Explorer and Edge */
+        body {
+            -ms-overflow-style: none;  /* Hide scrollbar in IE and Edge */
+        }
+
+        .form-label {
+            font-weight: normal;
+            color: grey;
+        }
+
+        .form-control,.form-select{
+            border: none;
+            border-bottom: 1px solid #000;
+            border-radius: 0;
+            padding-left: 0;
+            background-color: transparent;
+            outline: none !important;
+        }
+
+        .form-control:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        .form-select:focus{
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .form-control-dotted {
+            border: none;
+            border-bottom: 1px dotted #000;
+            border-radius: 0;
+            padding-left: 0;
+            background-color: transparent;
+            outline: none;
+        }
+
+        .form-control-dotted:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .btn btn-primary{
+            align-items: right;
+        }
+        .container{
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <form method="POST" action="{% url 'add_company' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="company-name" class="form-label">Company Name</label>
+                    <input type="text" class="form-control" id="company-name" name="name"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="founded-in" class="form-label">Founded In(Year)</label>
+                    <input type="text" class="form-control" id="founded-in" name="date_of_incorporation"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="industry-sector" class="form-label">Industry / Sector</label>
+                    <select class="form-select" id="industry-sector" name="sector" required>
+                        <option value="">Select Industry / Sector</option>
+                        <option value="2/3 Wheelers">2/3 Wheelers</option>
+                        <option value="Abrasives & Bearings">Abrasives & Bearings</option>
+                        <option value="Advertising & Media Agencies">Advertising & Media Agencies</option>
+                        <option value="Aerospace & Defense">Aerospace & Defense</option>
+                        <option value="Airline">Airline</option>
+                        <option value="Airport & Airport services">Airport & Airport services</option>
+                        <option value="Aluminium">Aluminium</option>
+                        <option value="Aluminium, Copper & Zinc Products">Aluminium, Copper & Zinc Products</option>
+                        <option value="Amusement Parks/ Other Recreation">Amusement Parks/ Other Recreation</option>
+                        <option value="Animal Feed">Animal Feed</option>
+                        <option value="Asset Management Company">Asset Management Company</option>
+                        <option value="Auto Components & Equipments">Auto Components & Equipments</option>
+                        <option value="Auto -Dealer">Auto -Dealer</option>
+                        <option value="Biotechnology">Biotechnology</option>
+                        <option value="Breweries & Distilleries">Breweries & Distilleries</option>
+                        <option value="Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)">Business Process Outsourcing (BPO)/ Knowledge Process Outsourcing (KPO)</option>
+                        <option value="Cables - Electricals">Cables - Electricals</option>
+                        <option value="Castings & Forgings">Castings & Forgings</option>
+                        <option value="Cement & Cement Products">Cement & Cement Products</option>
+                        <option value="Ceramics">Ceramics</option>
+                        <option value="Cigarettes & Tobacco Products">Cigarettes & Tobacco Products</option>
+                        <option value="Civil Construction">Civil Construction</option>
+                        <option value="Coal">Coal</option>
+                        <option value="Commercial Vehicles">Commercial Vehicles</option>
+                        <option value="Commodity Chemicals">Commodity Chemicals</option>
+                        <option value="Compressors, Pumps & Diesel Engines">Compressors, Pumps & Diesel Engines</option>
+                        <option value="Computers - Software & Consulting">Computers - Software & Consulting</option>
+                        <option value="Computers Hardware & Equipments">Computers Hardware & Equipments</option>
+                        <option value="Construction Vehicles">Construction Vehicles</option>
+                        <option value="Consulting Services">Consulting Services</option>
+                        <option value="Consumer Electronics">Consumer Electronics</option>
+                        <option value="Copper">Copper</option>
+                        <option value="Dairy Products">Dairy Products</option>
+                        <option value="Data Processing Services">Data Processing Services</option>
+                        <option value="Depositories, Clearing Houses and Other Intermediaries">Depositories, Clearing Houses and Other Intermediaries</option>
+                        <option value="Digital Entertainment">Digital Entertainment</option>
+                        <option value="Distributors">Distributors</option>
+                        <option value="Diversified">Diversified</option>
+                        <option value="Diversified Commercial Services">Diversified Commercial Services</option>
+                        <option value="Diversified consumer products">Diversified consumer products</option>
+                        <option value="Diversified FMCG">Diversified FMCG</option>
+                        <option value="Diversified Metals">Diversified Metals</option>
+                        <option value="Diversified Retail">Diversified Retail</option>
+                        <option value="Dredging">Dredging</option>
+                        <option value="Dyes And Pigments">Dyes And Pigments</option>
+                        <option value="Edible Oil">Edible Oil</option>
+                        <option value="Education">Education</option>
+                        <option value="E-Learning">E-Learning</option>
+                        <option value="Electrodes & Refractories">Electrodes & Refractories</option>
+                        <option value="Electronic Media">Electronic Media</option>
+                        <option value="E-Retail/ E-Commerce">E-Retail/ E-Commerce</option>
+                        <option value="Exchange and Data Platform">Exchange and Data Platform</option>
+                        <option value="Explosives">Explosives</option>
+                        <option value="Ferro & Silica Manganese">Ferro & Silica Manganese</option>
+                        <option value="Fertilizers">Fertilizers</option>
+                        <option value="Film Production, Distribution & Exhibition">Film Production, Distribution & Exhibition</option>
+                        <option value="Financial Institution">Financial Institution</option>
+                        <option value="Financial Products Distributor">Financial Products Distributor</option>
+                        <option value="Financial Technology (Fintech)">Financial Technology (Fintech)</option>
+                        <option value="Footwear">Footwear</option>
+                        <option value="Forest Products">Forest Products</option>
+                        <option value="Furniture, Home Furnishing">Furniture, Home Furnishing</option>
+                        <option value="Furniture, Home Furnishing, Flooring">Furniture, Home Furnishing, Flooring</option>
+                        <option value="Garments & Apparels">Garments & Apparels</option>
+                        <option value="Gas Transmission/Marketing">Gas Transmission/Marketing</option>
+                        <option value="Gems, Jewellery And Watches">Gems, Jewellery And Watches</option>
+                        <option value="General Insurance">General Insurance</option>
+                        <option value="Glass - Consumer">Glass - Consumer</option>
+                        <option value="Glass - Industrial">Glass - Industrial</option>
+                        <option value="Granites & Marbles">Granites & Marbles</option>
+                        <option value="Healthcare Research, Analytics & Technology">Healthcare Research, Analytics & Technology</option>
+                        <option value="Healthcare Service Provider">Healthcare Service Provider</option>
+                        <option value="Heavy Electrical Equipment">Heavy Electrical Equipment</option>
+                        <option value="Holding Company">Holding Company</option>
+                        <option value="Hospital">Hospital</option>
+                        <option value="Hotels & Resorts">Hotels & Resorts</option>
+                        <option value="Household Appliances">Household Appliances</option>
+                        <option value="Household Products">Household Products</option>
+                        <option value="Houseware">Houseware</option>
+                        <option value="Housing Finance Company">Housing Finance Company</option>
+                        <option value="Industrial Gases">Industrial Gases</option>
+                        <option value="Industrial Machinery">Industrial Machinery</option>
+                        <option value="Industrial Minerals">Industrial Minerals</option>
+                        <option value="Industrial Products">Industrial Products</option>
+                        <option value="Integrated Power Utilities">Integrated Power Utilities</option>
+                        <option value="Internet & Catalogue Retail">Internet & Catalogue Retail</option>
+                        <option value="Investment Company">Investment Company</option>
+                        <option value="Iron & Steel">Iron & Steel</option>
+                        <option value="Iron & Steel Products">Iron & Steel Products</option>
+                        <option value="IT Enabled Services">IT Enabled Services</option>
+                        <option value="Jute & Jute Products">Jute & Jute Products</option>
+                        <option value="Leather And Leather Products">Leather And Leather Products</option>
+                        <option value="Leisure Products">Leisure Products</option>
+                        <option value="Life Insurance">Life Insurance</option>
+                        <option value="Logistics Solution Provider">Logistics Solution Provider</option>
+                        <option value="LPG/CNG/PNG/LNG Supplier">LPG/CNG/PNG/LNG Supplier</option>
+                        <option value="Lubricants">Lubricants</option>
+                        <option value="Meat Products including Poultry">Meat Products including Poultry</option>
+                        <option value="Media & Entertainment">Media & Entertainment</option>
+                        <option value="Medical Equipment & Supplies">Medical Equipment & Supplies</option>
+                        <option value="Microfinance Institutions">Microfinance Institutions</option>
+                        <option value="Mutual Fund Scheme - ETF">Mutual Fund Scheme - ETF</option>
+                        <option value="Non Banking Financial Company (NBFC)">Non Banking Financial Company (NBFC)</option>
+                        <option value="Offshore Support Solution Drilling">Offshore Support Solution Drilling</option>
+                        <option value="Oil Equipment & Services">Oil Equipment & Services</option>
+                        <option value="Oil Exploration & Production">Oil Exploration & Production</option>
+                        <option value="Other Agricultural Products">Other Agricultural Products</option>
+                        <option value="Other Bank">Other Bank</option>
+                        <option value="Other Beverages">Other Beverages</option>
+                        <option value="Other Capital Market related Services">Other Capital Market related Services</option>
+                        <option value="Other Construction Materials">Other Construction Materials</option>
+                        <option value="Other Consumer Services">Other Consumer Services</option>
+                        <option value="Other Electrical Equipment">Other Electrical Equipment</option>
+                        <option value="Other Financial Services">Other Financial Services</option>
+                        <option value="Other Food Products">Other Food Products</option>
+                        <option value="Other Industrial Products">Other Industrial Products</option>
+                        <option value="Other Telecom Services">Other Telecom Services</option>
+                        <option value="Other Textile Products">Other Textile Products</option>
+                        <option value="Other Utilities">Other Utilities</option>
+                        <option value="Packaged Foods">Packaged Foods</option>
+                        <option value="Packaging">Packaging</option>
+                        <option value="Paints">Paints</option>
+                        <option value="Paper & Paper Products">Paper & Paper Products</option>
+                        <option value="Passenger Cars & Utility Vehicles">Passenger Cars & Utility Vehicles</option>
+                        <option value="Personal Care">Personal Care</option>
+                        <option value="Pesticides & Agrochemicals">Pesticides & Agrochemicals</option>
+                        <option value="Petrochemicals">Petrochemicals</option>
+                        <option value="Pharmaceuticals">Pharmaceuticals</option>
+                        <option value="Pharmacy Retail">Pharmacy Retail</option>
+                        <option value="Pig Iron">Pig Iron</option>
+                        <option value="Plastic Products - Consumer">Plastic Products - Consumer</option>
+                        <option value="Plastic Products - Industrial">Plastic Products - Industrial</option>
+                        <option value="Plywood Boards/ Laminates">Plywood Boards/ Laminates</option>
+                        <option value="Port & Port services">Port & Port services</option>
+                        <option value="Power - Transmission">Power - Transmission</option>
+                        <option value="Power Generation">Power Generation</option>
+                        <option value="Power Trading">Power Trading</option>
+                        <option value="Precious Metals">Precious Metals</option>
+                        <option value="Print Media">Print Media</option>
+                        <option value="Printing & Publication">Printing & Publication</option>
+                        <option value="Private Sector Bank">Private Sector Bank</option>
+                        <option value="Public Sector Bank">Public Sector Bank</option>
+                        <option value="Railway Wagons">Railway Wagons</option>
+                        <option value="Ratings">Ratings</option>
+                        <option value="Real Estate Investment Trusts (REITs)">Real Estate Investment Trusts (REITs)</option>
+                        <option value="Real Estate related services">Real Estate related services</option>
+                        <option value="Refineries & Marketing">Refineries & Marketing</option>
+                        <option value="Residential, Commercial Projects">Residential, Commercial Projects</option>
+                        <option value="Restaurants">Restaurants</option>
+                        <option value="Road Assets–Toll, Annuity, Hybrid-Annuity">Road Assets–Toll, Annuity, Hybrid-Annuity</option>
+                        <option value="Road Transport">Road Transport</option>
+                        <option value="Rubber">Rubber</option>
+                        <option value="Sanitary Ware">Sanitary Ware</option>
+                        <option value="Seafood">Seafood</option>
+                        <option value="Ship Building & Allied Services">Ship Building & Allied Services</option>
+                        <option value="Shipping">Shipping</option>
+                        <option value="Software Products">Software Products</option>
+                        <option value="Speciality Retail">Speciality Retail</option>
+                        <option value="Specialty Chemicals">Specialty Chemicals</option>
+                        <option value="Sponge Iron">Sponge Iron</option>
+                        <option value="Stationary">Stationary</option>
+                        <option value="Stockbroking & Allied">Stockbroking & Allied</option>
+                        <option value="Sugar">Sugar</option>
+                        <option value="Tea & Coffee">Tea & Coffee</option>
+                        <option value="Telecom - Equipment & Accessories">Telecom - Equipment & Accessories</option>
+                        <option value="Telecom - Cellular & Fixed line services">Telecom - Cellular & Fixed line services</option>
+                        <option value="Telecom - Infrastructure">Telecom - Infrastructure</option>
+                        <option value="Tour, Travel Related Services">Tour, Travel Related Services</option>
+                        <option value="Tractors">Tractors</option>
+                        <option value="Trading - Chemicals">Trading - Chemicals</option>
+                        <option value="Trading - Metals">Trading - Metals</option>
+                        <option value="Trading - Minerals">Trading - Minerals</option>
+                        <option value="Trading - Textile Products">Trading - Textile Products</option>
+                        <option value="Trading & Distributors">Trading & Distributors</option>
+                        <option value="Trading Coal">Trading Coal</option>
+                        <option value="Transport Related Services">Transport Related Services</option>
+                        <option value="TV Broadcasting & Software Production">TV Broadcasting & Software Production</option>
+                        <option value="Tyres & Rubber Products">Tyres & Rubber Products</option>
+                        <option value="Waste Management">Waste Management</option>
+                        <option value="Water Supply & Management">Water Supply & Management</option>
+                        <option value="Wellness">Wellness</option>
+                        <option value="Zinc">Zinc</option>
+                    </select>
+                    
+                </div>
+                
+                <div class="mb-3">
+                    <label for="business-type" class="form-label">Type of Business</label>
+                    <select class="form-select" id="business-type" name="business_type"  required>
+                        <!-- Add the options here -->
+                        <option value="">Select Type of Business</option>
+                        <option value="B2B">B2B (Business to Business)</option>
+                        <option value="B2G">B2G (Business to Government)</option>
+                        <option value="B2C">B2C (Business to Consumer)</option>
+                        <option value="B2B2B">B2B2B (Business to Business to Business)</option>
+                        <option value="D2C">D2C (Direct to Consumer)</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>                
+
+                <div class="mb-3">
+                    <label for="employees" class="form-label">Number of Employees (Including founders)</label>
+                    <input type="number" class="form-control" id="employees" name="no_of_employees"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="location"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="online-presence" class="form-label">Online Presence(URL)</label>
+                    <input type="text" class="form-control" id="online-presence" name="website_url"  required onblur="validateURL()">
+                    <span id="url-error" class="error-message" style="color: red; font-size: 12px; display: none;">Please enter a valid URL (starting with http:// or https://).</span>
+                </div>
+                <div class="mb-3">
+                    <label for="linked-url" class="form-label">Linked URL</label>
+                    <input type="text" class="form-control" id="linked-url" name="linked" required onblur="validateLinkedInURL()">
+                    <span id="linked-url-error" class="error-message" style="color: red; font-size: 12px; display: none;">Please enter a valid URL (starting with http:// or https://).</span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contact Information</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">E Mail:</label>
+                            <input type="email" class="form-control" id="email" name="email"  required>
+                           
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone Number:</label>
+                            <input type="number" class="form-control" id="phone" name="phone"  required  onblur="validatePhone()">
+                            <span id="phone-error" class="error-message" style="color: red; font-size: 12px; display: none;">Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label for="company-vision" class="form-label">Company Vision</label>
+                    <input type="text" class="form-control" id="company-vision" name="vision"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="products-services" class="form-label">Products & Services</label>
+                    <input type="text" class="form-control" id="products-services" name="products"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="key-competitors" class="form-label">Key Competitors</label>
+                    <input type="text" class="form-control" id="key-competitors" name="competitor"  required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Three Year Revenue & Profit(INR Lacs)</label>
+                    <div class="black-label">Current Year (YTD): Revenue = <input type="number" step="any" class="form-control-dotted" name="current_revenue"  required> P/L = <input type="number" step="any" class="form-control-dotted" name="current_pl"></div>
+                    <div class="black-label mt-2">Previous Year: Revenue = <input type="number" step="any" class="form-control-dotted" name="previous_revenue"  required> P/L = <input type="number" step="any" class="form-control-dotted" name="previous_pl"></div>
+                    <div class="black-label mt-2">A year before: Revenue = <input type="number" step="any" class="form-control-dotted" name="a_yearbefore_revenue"  required> P/L = <input type="number" step="any" class="form-control-dotted" name="a_yearbefore_pl"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="customers" class="form-label">Number of Customers</label>
+                    <input type="number" class="form-control" id="customers" name="customers" step="1" min="0" required>
+                </div>
+                
+
+                <div class="mb-6">
+                    <label for="additional-info" class="form-label">Additional Information</label>
+                    <input type="text" class="form-control" id="additional-info" name="additional" >
+                </div>
+                <div class="mb-3 d-flex justify-content-end" style="padding-top: 10px;">
+                    <button type="submit" class="btn btn-primary" id="submit-btn" disabled>Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+     document.getElementById("customers").addEventListener("input", function (e) {
+        // Remove any decimal points
+        this.value = this.value.replace(/\D/g, '');
+    });
+let isWebsiteValid = false;
+    let isLinkedInValid = false;
+    let isPhoneValid = false;
+
+    // Function to validate website URL
+    function validateURL() {
+        const urlInput = document.getElementById('online-presence');
+        const urlError = document.getElementById('url-error');
+        const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+
+        if (!urlPattern.test(urlInput.value)) {
+            urlError.style.display = 'block';
+            isWebsiteValid = false;
+        } else {
+            urlError.style.display = 'none';
+            isWebsiteValid = true;
+        }
+        toggleSubmitButton();
+    }
+
+    // Function to validate LinkedIn URL
+    function validateLinkedInURL() {
+        const linkedInInput = document.getElementById('linked-url');
+        const linkedInError = document.getElementById('linked-url-error');
+        const urlPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(\/\S*)?$/;
+
+        if (!urlPattern.test(linkedInInput.value)) {
+            linkedInError.style.display = 'block';
+            isLinkedInValid = false;
+        } else {
+            linkedInError.style.display = 'none';
+            isLinkedInValid = true;
+        }
+        toggleSubmitButton();
+    }
+
+    // Function to validate phone number
+    function validatePhone() {
+        const phoneInput = document.getElementById('phone');
+        const phoneError = document.getElementById('phone-error');
+        const phonePattern = /^[6-9][0-9]{9}$/;
+
+        if (!phonePattern.test(phoneInput.value)) {
+            phoneError.style.display = 'block';
+            isPhoneValid = false;
+        } else {
+            phoneError.style.display = 'none';
+            isPhoneValid = true;
+        }
+        toggleSubmitButton();
+    }
+
+    // Enable submit button only if all fields are valid
+    function toggleSubmitButton() {
+        const submitBtn = document.getElementById('submit-btn');
+        if (isWebsiteValid && isLinkedInValid && isPhoneValid) {
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.disabled = true;
+        }
+    }
+
+</script>
+
+</body>
+</html>
+{% endblock content %}

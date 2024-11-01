@@ -1,0 +1,701 @@
+
+
+{% include './company_profile.html' %}
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company News</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Tooltip wrapper */
+.btn-custom-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    position: absolute;
+    top: -35px; /* Position above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+/* Show tooltip on button hover */
+.btn-custom-wrapper:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+
+       .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 10; /* Ensure it stays above other elements */
+    }
+        .container {
+            position: relative;
+            padding: 20px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            max-width: 1000px;
+            margin-left: 240px;
+            height: 600px;
+            overflow-y: auto ;
+            margin-top: -50px; /* Move the container upwards */
+            /* padding-top: 0px; */
+            scrollbar-width: none; /* For Firefox */
+        }
+        .container::-webkit-scrollbar {
+            display: none; /* For Chrome, Safari, and Opera */
+        }
+        body {
+            font-family: 'Arial MT Rounded';
+            overflow: hidden;
+        }
+
+        .label-text {
+            font-size: 12px;
+            color: grey;
+        }
+
+        .content-text {
+            font-size: 16px;
+        }
+
+        .news-item {
+            border-bottom: 1px solid #898888;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .edit-btn,
+        .update-btn,
+        .delete-btn,
+        .cancel-btn {
+            position: absolute;
+            top: 10px;
+        }
+
+        .edit-btn,
+        .update-btn {
+            right: 120px;
+        }
+
+        .delete-btn {
+            right: 60px;
+        }
+
+        .cancel-btn {
+            right: 10px;
+        }
+
+        .add-news-btn {
+            cursor: pointer;
+            font-size: 30px;
+            color: black;
+            text-align: right;
+            margin-bottom: 20px;
+            margin-left: 1000px;
+        }
+
+        .edit-buttons {
+            display: none;
+        }
+
+        .news-summary {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .form-control {
+            border: none !important;
+            border-radius: 0px;
+        }
+
+        .form-control:focus {
+            border-left: 0px;
+            border-right: 0px;
+            border-top: 0px;
+            border-bottom: 1px solid black;
+            box-shadow: none;
+            border-radius: 5px;
+        }
+        .breadcrumb{
+            font-size: 18px;
+            color: black;
+            flex: 1;
+            margin-top: 90px !important;
+            margin-left: 260px;
+            font-family: 'Arial MT Rounded' !important;
+            display: flex;
+            align-items: left;  
+            /* align-items: space-between;       */
+        }
+        .add-news-btn {
+            background-color: transparent; /* Set background color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center; /* Center the image and text vertically */
+            gap: 10px; /* Gap between image and text */
+            margin-left: 1460px;
+            margin-top: -41px;
+            padding: 0;
+            position: absolute;
+        }
+        .add-news-btn img {
+            width: 35px; /* Ensure the image has a proper size */
+            height: 35px;
+            margin: 0;
+            padding: 0;
+            display: inline-block; /* Make sure it's displayed properly */
+        }
+        /* General styles for larger screens (laptops and desktops) */
+        @media (min-width: 1024px) {
+            .breadcrumb {
+                margin-left: 260px;
+                margin-top: 25px;
+                font-size: 18px;
+            }
+            /* .add-news-btn {
+                margin-left: 350px;
+                left: 50%; 
+                transform: translateX(-50%);
+            }  */
+
+            
+        }
+
+        /* Tablet screens (between 768px and 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .breadcrumb {
+                margin-left: 20px;
+                margin-top: 20px;
+                font-size: 16px;
+            }
+            .add-news-btn {
+                margin-left: 350px;
+                /* margin-top: 20px; */
+                left: 50%; /* Center the button horizontally */
+                transform: translateX(-50%);
+            }
+            .container {
+                margin: 20px 20px 20px 0px;
+                
+            }
+
+            .main-content {
+                margin-top: 0px;
+                margin-left: 0px;
+                
+            }
+        }
+
+        /* Mobile screens (less than 768px) */
+        @media (max-width: 767px) {
+            .breadcrumb {
+                margin-left: 10px;
+                margin-top: 15px;
+                font-size: 14px;
+                text-align: center;
+            }
+            
+
+            .add-news-btn {
+                margin-left: 160px;
+                /* margin-top: 20px; */
+                left: 50%; /* Center the button horizontally */
+                transform: translateX(-50%);
+            }
+            .main-content {
+                margin-top: 0px;
+                margin-left: 0px;
+                
+            }
+            .container {
+                margin: 20px 20px 20px 0px;
+                
+            }
+            
+        }
+    </style>
+</head>
+
+<body>
+    <div class="breadcrumb">
+        <span>My Companies</span> &ndash; <span>{{ company.name }}</span> &ndash; <span style="font-weight: bold;">News & Events</span>
+    </div>
+    <div class="add-news-btn" id="add-news-btn" onclick="toggleForm()" title="Add  new news">
+        <img src="{% static 'images/add.png' %}" alt="Add">
+    </div>
+    
+
+    <div class="container my-0" id="container">
+        <!-- Button to show the form -->
+        {% if news_data %}
+        
+        {% endif %}
+
+        {% if news_data %}
+        {% for i in news_data|dictsortreversed:"line_no" %}
+        {% if not i.line_no == 1 %}
+        <form id="news-form_{{i.line_no}}" class="mb-4 news-item">
+            <div class="mb-3">
+                <label for="newsDate_{{ i.id }}" class="label-text">Date:</label>
+                <input type="text" class="form-control content-text newsDate" id="newsDate_{{ i.id }}" value="{{ i.sub_date|date:'d-m-Y' }}" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="summary_{{ i.id }}" class="label-text">Brief Summary:</label>
+                <textarea class="form-control content-text summary" id="summary_{{ i.id }}" rows="3" readonly>{{ i.summary }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="link_{{ i.id }}" class="label-text">Link:</label>
+                <input type="text" class="form-control content-text link" id="link_{{ i.id }}" value="{{ i.link }}" readonly oninput="validateLink({{ i.id }})">
+            </div>
+            
+           
+            
+          <div class="text-end">
+    <button type="button" class="btn btn-warning edit-btn" id="edit-news_{{i.id}}" style="background-color: white; border: none;" onclick="editNews({{i.id}})" title="Edit News">
+        <img src="{% static 'images/edit.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn btn-danger delete-btn" id="delete-news_{{i.id}}" style="background-color: white; border: none;" onclick="deleteNews({{i.id}})" title="Delete News">
+        <img src="{% static 'images/delete.png' %}" style="width: 29px; height: 29px;">
+    </button>
+
+    <button type="button" class="btn btn-primary save-btn" id="save-news_{{i.id}}" style="display:none; background-color: white; border: none;" onclick="saveNews({{i.id}})" title="Save Edited News">
+        <img src="{% static 'images/save.png' %}" style="width: 29px; height: 29px;">
+    </button>
+    <button type="button" class="btn btn-secondary cancel-btn" id="cancel-news_{{i.id}}" style="display:none; background-color: white; border: none;" onclick="cancelEdit({{i.id}})" title="Cancel Edit">
+        <img src="{% static 'images/cancel.png' %}" style="width: 29px; height: 29px;">
+    </button>
+</div>
+
+        </form>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <!-- News Form -->
+        <!-- <form id="news-form" class="mb-4">
+            <div class="mb-3">
+                <label for="newsDate" class="label-text">Date:</label>
+                <input type="text" class="form-control content-text" id="newsDate_1" name="newsDate" {% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %} value="{{i.sub_date|date:'d-m-Y'}}" {% endif %}{% endfor %}{% else %} value="{{current_date|date:'d-m-Y'}}" {% endif %} readonly>
+            </div>
+            <div class="mb-3">
+                <label for="summary" class="label-text">Brief Summary:</label>
+                <textarea class="form-control content-text" name="summary" id="summary_1" rows="3"
+                    placeholder="Enter the news summary">{% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %}{{i.summary}}{% endif %}{% endfor %}{% endif %}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="link" class="label-text">Link:</label>
+                <input type="text" class="form-control content-text" name="link" id="link_1" {% if news_data %}{% for i in news_data %}{% if i.line_no == 1 %} value="{{i.link}}" {% endif %}{% endfor %}{% endif %} placeholder="www.example.com">
+            </div>
+            Align button to the right -->
+            <!-- <div class="text-end">
+                <button type="button" class="btn btn-primary content-text" id="submit-news_1" onclick="handleNewsSubmit(1)">Add News</button>
+            </div>
+        </form> -->
+
+        <!-- Section to display added news -->
+        <div id="news-container"></div>
+
+    </div>
+
+    {% if last_rec %}
+    <script>
+        var last_rec_1 = "{{last_rec}}";        
+    </script>
+    {% else %}
+    <script>
+        var last_rec_1 = 1
+    </script>
+    {% endif %}
+
+    <script>
+
+        let sectionCount = last_rec_1; // Initialize section count
+
+        console.log('sectionCount', sectionCount)
+
+        document.getElementById('add-news-btn').addEventListener('click', function () {
+            sectionCount++;
+            const newSectionHTML = `
+            <form id="news-form_${sectionCount}" class="mb-4">
+                <div class="mb-3">
+                    <label for="newsDate_${sectionCount}" class="label-text">Date:</label>
+                    <input type="text" class="form-control content-text" id="newsDate_${sectionCount}" value="{{ current_date|date:'d-m-Y' }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="summary_${sectionCount}" class="label-text">Brief Summary:</label>
+                    <textarea class="form-control content-text" id="summary_${sectionCount}" rows="3" placeholder="Enter the news summary"></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="link_${sectionCount}" class="label-text">Link:</label>
+                    <input type="text" class="form-control content-text" id="link_${sectionCount}" oninput="validate(${sectionCount})" placeholder="www.example.com">
+                     <span id="link-error_${sectionCount}" style="color: red; font-size: 12px; display: none;">Invalid URL format</span>
+                    </div>
+                <!-- Align button to the right -->
+                <div class="text-end">
+        <button type="button" class="btn btn-primary content-text" id="submit-news_${sectionCount}" onclick="handleNewsSubmit(${sectionCount})" style="background-color: white; border:none;">
+            <img src="{% static 'images/save.png' %}" alt="Add" style="width: 35px; height: 35px;">
+        </button>
+    </div>
+            </form>
+        `;
+
+        // Insert new section into the container
+        document.getElementById('container').insertAdjacentHTML('beforeend', newSectionHTML);
+
+        // Scroll the container to the bottom
+        const container = document.getElementById('container');
+        container.scrollTop = container.scrollHeight;
+    });
+    
+    
+    
+    function validate(sectionId) {
+        const linkInput = document.getElementById(`link_${sectionId}`);
+        const linkError = document.getElementById(`link-error_${sectionId}`);
+        const saveButton = document.getElementById(`submit-news_${sectionId}`);
+
+        // Adjusted regex pattern for validating URL
+        const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.)+[\w]{2,}(\/?.*)?$/i;
+
+        if (urlPattern.test(linkInput.value) || linkInput.value === "") {
+            linkError.style.display = 'none';
+            saveButton.disabled = false; // Enable save button if URL is valid or empty
+            linkInput.style.borderBottom = '1px solid #ccc'; // Reset border color
+        } else {
+            linkError.style.display = 'block';
+            saveButton.disabled = true; // Disable save button if URL is invalid
+            linkInput.style.borderBottom = '1px solid red'; // Highlight border color for invalid input
+        }
+    }
+
+    function handleNewsSubmit(sectionId) {
+    const dateField = document.getElementById(`newsDate_${sectionId}`);
+    const summaryField = document.getElementById(`summary_${sectionId}`);
+    const linkField = document.getElementById(`link_${sectionId}`);
+    const linkError = document.getElementById(`link-error_${sectionId}`);
+    
+    // Validate that summary and link fields are not empty
+    if (!summaryField.value.trim()) {
+        alert('Please provide a summary.');
+        return;
+    }
+    if (!linkField.value.trim()) {
+        alert('Please provide a link.');
+        return;
+    }
+
+    // Validate link format
+    const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.)+[\w]{2,}(\/?.*)?$/i;
+    if (!urlPattern.test(linkField.value)) {
+        linkError.style.display = 'block';
+        alert('Please enter a valid URL.');
+        return;
+    } else {
+        linkError.style.display = 'none';
+    }
+
+    // Convert date to required format (DD-MM-YYYY to YYYY-MM-DD)
+    const dateParts = dateField.value.split('-');
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+    // Prepare form data for submission
+    const formData = new FormData();
+    formData.append('newsDate', formattedDate);
+    formData.append('summary', summaryField.value);
+    formData.append('link', linkField.value);
+    formData.append('line_no', sectionId);
+
+    // Submit the form data to the server
+    fetch("{% url 'news_post' company.company_id %}", {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+
+            // Optionally, clear the form fields
+            dateField.value = '';
+            summaryField.value = '';
+            linkField.value = '';
+
+            // Reload to show updated news or refresh the news section
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    });
+}
+
+        function refreshNewsSection() {
+            // Fetch the updated news section from the server
+            fetch("{% url 'news_post' company.company_id %}")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();  // Get the response as HTML text
+                })
+                .then(html => {
+                    // Parse the returned HTML and extract the news section
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newNewsSection = doc.querySelector('#news-container'); // Adjust selector if necessary
+
+                    // Replace the old news section with the new one
+                    const oldNewsSection = document.querySelector('#news-container');
+                    if (oldNewsSection && newNewsSection) {
+                        oldNewsSection.innerHTML = newNewsSection.innerHTML;
+                        
+                        // Re-attach event listeners for new dynamically added elements
+                        attachNewsEventListeners();  // Ensure you have a function for this
+                    }
+                })
+                .catch(error => {
+                    console.error('Error while refreshing news section:', error);
+                });
+        }
+
+        // Function to re-attach event listeners after the DOM has been updated
+        function attachNewsEventListeners() {
+            // Re-attach event listeners for dynamically added buttons and forms
+            document.querySelectorAll('.submit-news').forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    handleNewsSubmit(index + 1);  // Ensure the right section is being submitted
+                });
+            });
+
+            // Add any other necessary event listeners for the dynamically updated content
+        }
+        function editNews(id) {
+    // Toggle form fields to make them editable
+    const dateField = document.getElementById(`newsDate_${id}`);
+    const summaryField = document.getElementById(`summary_${id}`);
+    const linkField = document.getElementById(`link_${id}`);
+
+    if (dateField && summaryField && linkField) {
+        dateField.removeAttribute('readonly');
+        summaryField.removeAttribute('readonly');
+        linkField.removeAttribute('readonly');
+    } else {
+        console.error(`One or more elements with ID newsDate_${id}, summary_${id}, or link_${id} not found.`);
+        return; // Exit function if elements are not found
+    }
+
+    // Show Save and Cancel buttons, hide Edit and Delete buttons
+    const editBtn = document.getElementById(`edit-news_${id}`);
+    const deleteBtn = document.getElementById(`delete-news_${id}`);
+    const saveBtn = document.getElementById(`save-news_${id}`);
+    const cancelBtn = document.getElementById(`cancel-news_${id}`);
+    
+    if (editBtn && deleteBtn && saveBtn && cancelBtn) {
+        editBtn.style.display = 'none';
+        deleteBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
+    } else {
+        console.error(`One or more buttons with ID edit-news_${id}, delete-news_${id}, save-news_${id}, or cancel-news_${id} not found.`);
+    }
+}
+function cancelEdit(lineNo) {
+    // Disable form fields and revert to their original state
+    document.getElementById(`newsDate_${lineNo}`).setAttribute('readonly', true);
+    document.getElementById(`summary_${lineNo}`).setAttribute('readonly', true);
+    document.getElementById(`link_${lineNo}`).setAttribute('readonly', true);
+
+    // Hide Save and Cancel buttons, show Edit and Delete buttons
+    document.getElementById(`edit-news_${lineNo}`).style.display = 'inline-block';
+    document.getElementById(`delete-news_${lineNo}`).style.display = 'inline-block';
+    document.getElementById(`save-news_${lineNo}`).style.display = 'none';
+    document.getElementById(`cancel-news_${lineNo}`).style.display = 'none';
+}
+function deleteNews(newsId) {
+    if (confirm('Are you sure you want to delete this news item?')) {
+        // Create a POST request to delete the news
+        fetch(`/news/delete/${newsId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                alert(data.message);
+                // Check if the news form exists before trying to remove it
+                window.location.reload();
+                const newsForm = document.getElementById(`news-form_${newsId}`);
+                if (newsForm) {
+                    newsForm.remove();
+                } else {
+                    console.error(`Element news-form_${newsId} not found in the DOM.`);
+                }
+            } else {
+                alert('Error: ' + (data.error || 'Failed to delete news item.'));
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        });
+    }
+}
+function saveNews(id) {
+    const saveButton = document.getElementById(`save-news_${id}`);
+    if (saveButton) {
+        saveButton.disabled = true; // Disable the button to prevent multiple clicks
+    } else {
+        console.error(`Save button save-news_${id} not found.`);
+    }
+
+    const dateField = document.getElementById(`newsDate_${id}`);
+    const summaryField = document.getElementById(`summary_${id}`);
+    const linkField = document.getElementById(`link_${id}`);
+
+    if (!dateField || !summaryField || !linkField) {
+        console.error(`One or more fields newsDate_${id}, summary_${id}, or link_${id} not found.`);
+        return; // Exit function if any field is missing
+    }
+
+    const date = dateField.value;
+    const summary = summaryField.value;
+    const link = linkField.value;
+
+    // Validate that summary and link are not empty
+    if (!summary.trim() || !link.trim()) {
+        alert('Please fill in both the summary and link fields.');
+        saveButton.disabled = false; // Re-enable the button if validation fails
+        return;
+    }
+
+    // Convert the date from DD-MM-YYYY to YYYY-MM-DD
+    const dateParts = date.split('-');
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+
+    const formData = new FormData();
+    formData.append('newsDate', formattedDate);
+    formData.append('summary', summary);
+    formData.append('link', link);
+    formData.append('id', id);
+
+    fetch(`/news/update/${id}/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.message) {
+            alert(data.message);
+
+            // After saving, switch back to Edit and Delete buttons
+            document.getElementById(`edit-news_${id}`).style.display = 'inline-block';
+            document.getElementById(`delete-news_${id}`).style.display = 'inline-block';
+            document.getElementById(`save-news_${id}`).style.display = 'none';
+            document.getElementById(`cancel-news_${id}`).style.display = 'none';
+
+            // Make fields readonly again
+            dateField.setAttribute('readonly', true);
+            summaryField.setAttribute('readonly', true);
+            linkField.setAttribute('readonly', true);
+        } else {
+            alert('Error: ' + data.error);
+        }
+        saveButton.disabled = false; // Re-enable the button after processing
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+        saveButton.disabled = false; // Re-enable the button on error
+    });
+}
+
+
+function validateLink(id) {
+    const linkInput = document.getElementById(`link_${id}`);
+    const linkError = document.getElementById(`link-error_${id}`);
+    const saveButton = document.getElementById(`save-news_${id}`);
+
+    if (!linkInput) {
+        console.error(`Element link_${id} not found.`);
+        return; // Exit function if linkInput is null
+    }
+
+    // Adjusted regex pattern for validating URL
+    const urlPattern = /^(https?:\/\/)?([\w\d\-]+\.)+[\w]{2,}(\/?.*)?$/i;
+
+    if (urlPattern.test(linkInput.value) || linkInput.value === "") {
+        if (linkError) linkError.style.display = 'none';
+        if (saveButton) saveButton.disabled = false;
+        linkInput.style.borderBottom = '1px solid #ccc'; // Reset border color
+    } else {
+        if (linkError) linkError.style.display = 'block';
+        if (saveButton) saveButton.disabled = true;
+        linkInput.style.borderBottom = '1px solid red'; // Highlight border color for invalid input
+    }
+}
+
+
+    </script>
+
+</body>
+
+</html>
+{% endblock content %}
